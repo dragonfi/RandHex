@@ -154,9 +154,14 @@ Crafty.c("RandomFlipper", {
 });
 
 window.onload = function(){
-	Crafty.init(800, 450);
+	var w = window.innerWidth - 50;
+	var h = window.innerHeight - 50;
+	var radius = 50;
+	var cols = (w / radius) - 2.5;
+	var rows = (h / (radius * Math.sqrt(3) / 2)) - 2;
+	Crafty.init(w, h);
 	Crafty.background("rgba(0, 0, 0, 0)");
 
-	var grid = Crafty.e("HexGrid").HexGrid(14, 9, 50);
+	var grid = Crafty.e("HexGrid").HexGrid(cols, rows, 50);
 	var rf = Crafty.e("RandomFlipper").RandomFlipper(grid, 100);
 };
