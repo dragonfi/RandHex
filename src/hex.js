@@ -23,7 +23,7 @@ Crafty.c("VisibleProperty", {
 
 Crafty.c("Hexagon", {
 	init: function() {
-		this.requires("2D, Canvas, VisibleProperty");
+		this.requires("2D, Canvas, VisibleProperty, Tween, Delay");
 		this.visibleProperty("radius");
 		this.bind("Change_radius", function() {
 			this.w = this.radius * 2;
@@ -48,6 +48,19 @@ Crafty.c("Hexagon", {
 		ctx.fill();
 		ctx.restore();
 	},
+	tweenColor: function(color) {
+		var dt = 1000;
+		var oldAttrs = {x: this.x, y: this.y, radius: this.radius};
+		var intermediateAttrs = {
+			x: this.x + this.radius,
+			y: this.y + this.radius * Math.sqrt(3) / 2,
+			radius: 0,
+		};
+		this.tween(intermediateAttrs, dt).delay(function() {
+			this.attr("color", color).tween(oldAttrs, dt);
+		}, dt, 0);
+		return this;
+	},
 });
 
 Crafty.c("HexGrid", {
@@ -67,11 +80,13 @@ Crafty.c("HexGrid", {
 					x: col * r + (row % 2) * r / 2,
 					y: row * r * Math.sqrt(3) / 2,
 					radius: r,
-					color: this._rgb(
+					color: "#888888",
+				}).tweenColor(this._rgb(
 						(col+1)/cols * 255,
 						(row+1)/rows * 255, 
-						(1 - (col+row) / (cols+rows)) * 255),
-				}).attr({radius: 0}).tween({radius: r}, 1000);
+						(1 - (col+row) / (cols+rows)) * 255
+					)
+				);
 				_cells[this._key(col, row)] = _cell;
 			}
 		}
