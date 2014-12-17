@@ -153,6 +153,31 @@ Crafty.c("RandomFlipper", {
 	},
 });
 
+Crafty.c("ClearOnSpace", {
+	init: function(){
+		this.requires("Keyboard, Delay");
+		this.bind("KeyDown", this.keyDownHandler);
+	},
+	keyDownHandler: function() {
+		if (this.isDown("SPACE")) {
+			this.clearGrid();
+		};
+	},
+	clearGrid: function() {
+		var keys = this.getKeys();
+		for (var i in keys) {
+			var key = keys[i];
+			this._clearCell(key, i * 20);
+		};
+	},
+	_clearCell: function(key, delta) {
+		this.delay(function() {
+			console.log(key, delta);
+			this.at(key).tweenColor("rgba(0, 0, 0, 0)");
+		}, delta, 0);
+	},
+});
+
 window.onload = function(){
 	var w = window.innerWidth - 20;
 	var h = window.innerHeight - 20;
@@ -162,6 +187,7 @@ window.onload = function(){
 	Crafty.init(w, h);
 	Crafty.background("rgba(0, 0, 0, 0)");
 
-	var grid = Crafty.e("HexGrid").HexGrid(cols, rows, 50);
+	var grid = Crafty.e("HexGrid, ClearOnSpace")
+		.HexGrid(cols, rows, radius);
 	var rf = Crafty.e("RandomFlipper").RandomFlipper(grid, 100);
 };
