@@ -154,8 +154,8 @@ Crafty.c("RandomFlipper", {
 });
 
 window.onload = function(){
-	var w = window.innerWidth - 50;
-	var h = window.innerHeight - 50;
+	var w = window.innerWidth - 20;
+	var h = window.innerHeight - 20;
 	var radius = 50;
 	var cols = (w / radius) - 2.5;
 	var rows = (h / (radius * Math.sqrt(3) / 2)) - 2;
