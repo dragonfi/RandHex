@@ -2,6 +2,9 @@ var Utils = {
 	randInt: function(max) {
 		return Math.floor(Math.random() * max);
 	},
+	randomChoice: function(seq) {
+		return seq[Utils.randInt(seq.length)];
+	},
 	rgb: function(r, g, b) {
 		r = Math.floor(r);
 		g = Math.floor(g);
@@ -47,8 +50,8 @@ Crafty.c("Hexagon", {
 		var ctx = Crafty.canvas.context;
 		ctx.save();
 		ctx.fillStyle = this.color;
-		//ctx.globalAlpha = 0.5;
-		ctx.globalCompositeOperation = "multiply";
+		ctx.globalAlpha = 0.5;
+		//ctx.globalCompositeOperation = "lighter";
 		//"lighten", "lighter", "multiply", "screen", "difference";
 		ctx.beginPath();
 		ctx.moveTo(this.x, this.y + this.h / 2);
@@ -101,7 +104,7 @@ Crafty.c("HexGrid", {
 					x: col * r + (row % 2) * r / 2,
 					y: row * r * Math.sqrt(3) / 2,
 					radius: r,
-					color: "#ffffff",
+					color: "rgba(0, 0, 0, 0)",
 				});
 				_cells[this._key(col, row)] = _cell;
 			}
@@ -134,20 +137,26 @@ Crafty.c("RandomFlipper", {
 		return this;
 	},
 	flipRandomCell: function() {
-		var keys = this.grid.getKeys();
-		var index = Utils.randInt(keys.length);
-		var r = Utils.randInt(256);
-		var g = Utils.randInt(256);
-		var b = Utils.randInt(256);
-		this.grid.at(keys[index]).tweenColor(Utils.rgb(r, g, b));
+		var key = Utils.randomChoice(this.grid.getKeys());
+		var color = this.randomColor();
+		this.grid.at(key).tweenColor(color);
 		return this;
+	},
+	randomColor: function() {
+		var colors = [
+			"rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)",
+			"rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)",
+			"#ff0000", "#00ff00", "#0000ff",
+			"#00ffff", "#ff00ff", "#ffff00",
+		]
+		return Utils.randomChoice(colors);
 	},
 });
 
 window.onload = function(){
 	Crafty.init(800, 450);
-	Crafty.background("#ffffff");
+	Crafty.background("rgba(0, 0, 0, 0)");
 
 	var grid = Crafty.e("HexGrid").HexGrid(14, 9, 50);
-	Crafty.e("RandomFlipper").RandomFlipper(grid, 100);
+	var rf = Crafty.e("RandomFlipper").RandomFlipper(grid, 100);
 };
