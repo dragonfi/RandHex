@@ -103,6 +103,8 @@ Crafty.c("HexGrid", {
 				var _cell = Crafty.e("Canvas, Hexagon, Tween").attr({
 					x: col * r + (row % 2) * r / 2,
 					y: row * r * Math.sqrt(3) / 2,
+					//x: col * 1.5 * r,
+					//y: ((col % 2) / 2 + row) * Math.sqrt(3) * r,
 					radius: r,
 					color: "rgba(0, 0, 0, 0)",
 				});
